@@ -3,6 +3,6 @@
 ## Devloping api using nodejs
 
 ### run
-```npm install```
+```bash npm install```
 
 to install the following depencies: express nodemon etc.
