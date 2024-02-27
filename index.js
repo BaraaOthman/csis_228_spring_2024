@@ -1,41 +1,35 @@
-// index.js
+const express = require("express");
+require("dotenv").config();
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-const express = require('express');
+const port = process.env.PORT || 3001;
+
 const app = express();
-const port = 3001;
 
-// Middleware to parse JSON requests
-app.use(express.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
-// GET request for the homepage
-app.get('/', (req, res) => {
-  res.send('Hello, this is the homepage!');
+app.use(cors({origin: '*'}));
+
+const users = require('./routes/users.routes');
+
+app.get("/", async (req, res)=>{
+    const users = await query("select * from users");
+    const data = {
+        message: "test message",
+        content: "this is the content",
+        users: users,
+    }
+    res.status(200).json({data});
 });
 
-// POST request to handle incoming data
-app.post('/api/data', (req, res) => {
-  const data = req.body;
-  // Process the data as needed
-  res.json({ message: 'Data received successfully', data });
-});
+app.use('/api/users', users);
 
-// PUT request to update data
-app.put('/api/data/:id', (req, res) => {
-  const id = req.params.id;
-  // Update data with the specified ID
-  // Example: Update data in the database
-  res.json({ message: `Data with ID ${id} updated successfully` });
-});
 
-// DELETE request to delete data
-app.delete('/api/data/:id', (req, res) => {
-  const id = req.params.id;
-  // Delete data with the specified ID
-  // Example: Delete data from the database
-  res.json({ message: `Data with ID ${id} deleted successfully` });
-});
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+app.listen(port, ()=>{
+    console.log(`my app is listening ${port}`);
+
+})
+
