@@ -53,11 +53,9 @@ const getUserById = async(id) =>{
  * @param {String} userMobileNumber 
  * @param {String} userDescription 
  * @param {String} userAddress 
- * is used to insert a user into the database
- * @returns User
+ * @returns user
  */
 const insertUser = async(userName,
-    userUserName,
     userEmail,
     userPassword,
     userDob,
@@ -66,25 +64,43 @@ const insertUser = async(userName,
     userAddress) =>{
 
         try{
+            const emailExist = await checkEmailExist(userEmail);
+            if(emailExist){
+                return `${userEmail} already exists`;
+            }
             let sql = `INSERT INTO users 
-            (user_name, user_username, user_email, user_password, user_dob)
+            (user_name, user_email, user_password, user_dob)
             VALUES
-            (?, ?, ?, ?, ?);
+            (?, ?, ?, ?);
             `;
             const result = await query(sql, 
                 [
                     userName, 
-                    userUserName, 
                     userEmail, 
-                    userEmail, 
+                    userPassword, 
                     moment(userDob).format("YYYY-MM-DD")
                 ]);
-            const user = await query("select * from users where user_id = ?", [result.insertId]);
+            const user = await query("select * from users where user_id = ?", 
+            [result.insertId]);
         
             return user[0];
         }catch(error){
             throw new Error(error);
         }
+}
+
+const checkEmailExist = async(email) =>{
+    try{
+        let sql = "SELECT * FROM users WHERE user_email = ?";
+        const result = await query(sql, [email]);
+        if(result && result.length){
+            return true;
+        }else{
+            return false;
+        }
+    }catch(error){
+        throw new Error(error);
+    }
 }
 
 const updateUser = async(user) => {

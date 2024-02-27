@@ -26,7 +26,6 @@ const insertUserController = async (req, res) => {
   console.log(req.body);
   const {
     userName,
-    userUserName,
     userEmail,
     userPassword,
     userDob,
@@ -38,7 +37,6 @@ const insertUserController = async (req, res) => {
   try {
     const result = await insertUser(
       userName,
-      userUserName,
       userEmail,
       userPassword,
       userDob,
