@@ -23,11 +23,25 @@ const getUsers = async() => {
     }
 }
 
+// const getUserById = async(id) =>{
+//     let sql = `SELECT * FROM users WHERE user_id = ?`;
+//     const user = await query(sql, [id]);
+//     return user;
+// } 
+
 const getUserById = async(id) =>{
-    let sql = `SELECT * FROM users WHERE user_id = ?`;
-    const user = await query(sql, [id]);
-    return user;
-} 
+
+    try{
+        //let userByIdSQL = `SELECT * FROM users WHERE user_id = "${id}"";`;
+        // prepared statement
+        let userByIdSQL = "SELECT * FROM users WHERE user_id = ?";
+        const user = await query(userByIdSQL, [id]);
+        return user;
+    }catch(error){
+        throw new Error(error);
+    }
+
+}
 
 /**
  * 

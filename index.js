@@ -14,16 +14,6 @@ app.use(cors({origin: '*'}));
 
 const users = require('./routes/users.routes');
 
-app.get("/", async (req, res)=>{
-    const users = await query("select * from users");
-    const data = {
-        message: "test message",
-        content: "this is the content",
-        users: users,
-    }
-    res.status(200).json({data});
-});
-
 app.use('/api/users', users);
 
 

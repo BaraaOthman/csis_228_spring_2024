@@ -24,6 +24,7 @@ const query = async (sql, params)=>{
         return results;
     }catch(error){
         console.error(`Query error -> ${sql}: ${error}`);
+        // propagate the error to the parent layer
         throw new Error(error);
     }
 
