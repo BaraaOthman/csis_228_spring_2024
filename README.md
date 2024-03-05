@@ -25,7 +25,7 @@ Follow these steps to get your Node.js API Backend up and running:
    git clone https://github.com/charbelfakhry/csis_228_spring_2024.git
    ```
 
-2. Run 
+2. To install dependencies
 
 ```bash 
 npm install 
