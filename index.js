@@ -14,9 +14,11 @@ app.use(bodyParser.json());
 app.use(cors({origin: '*'}));
 
 const users = require('./routes/users.routes');
+const countries = require('./routes/countries.routes');
 
 // importing 
 app.use('/api/users', users);
+app.use('/api/countries', countries);
 
 
 
