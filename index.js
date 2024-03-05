@@ -15,10 +15,11 @@ app.use(cors({origin: '*'}));
 
 const users = require('./routes/users.routes');
 const countries = require('./routes/countries.routes');
+const bmi = require('./routes/bmi.routes');
 
 // importing 
 app.use('/api/users', users);
-app.use('/api/countries', countries);
+app.use('/api/bmi', bmi);
 
 
 
