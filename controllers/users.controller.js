@@ -2,14 +2,20 @@ const { validationResult } = require('express-validator');
 const { getUsers, insertUser, authenticate, getUserById } = require('../services/users.services');
 
 const authenticateController = async(req, res) => {
-  const {username, password} = req.body;
-  if(!username){
-    res.status(401).json({message: "missing data"});
+  const {email, password} = req.body;
+  if(!email || !password){
+    return res.status(401).json({message: "missing data"});
   }
 
-  const result = await authenticate(username, password);
-  
-  res.status(200).json({message: "authenticated", user: result});
+  try{
+    const result = await authenticate(email, password);
+    if(!result){
+      return res.status(401).json({message: "Wrong username/password"});
+    }
+    res.status(200).json({ message: "authenticated", user: result });
+  }catch(error){
+    res.status(500).json({error, message: "Error authenticated"});
+  }
 }
 
 const getUsersController = async (req, res) => {

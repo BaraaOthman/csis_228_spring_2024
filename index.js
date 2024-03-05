@@ -1,5 +1,6 @@
 const express = require("express");
 require("dotenv").config();
+// to use req.body to capture JSON objects.
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -14,7 +15,10 @@ app.use(cors({origin: '*'}));
 
 const users = require('./routes/users.routes');
 
+// importing 
 app.use('/api/users', users);
+
+
 
 
 

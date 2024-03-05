@@ -2,13 +2,15 @@ const { query } = require("../database/db");
 const moment = require("moment");
 
 
-const authenticate = async (username, password) => {
+const authenticate = async (email, password) => {
     try {
-        let sql = `SELECT * FROM users WHERE user_name = ?
+        let sql = `SELECT * FROM users WHERE user_email = ?
     AND user_password = ?`
-        const user = await query(sql, [username, password]);
+        const user = await query(sql, [email, password]);
+        // I should have one user
         return user[0];
     } catch (error) {
+        // propagate an error
         throw new Error(error);
     }
 }
@@ -29,6 +31,11 @@ const getUsers = async() => {
 //     return user;
 // } 
 
+/**
+ * 
+ * @param {int} id 
+ * @returns users[]
+ */
 const getUserById = async(id) =>{
 
     try{
@@ -64,6 +71,7 @@ const insertUser = async(userName,
     userAddress) =>{
 
         try{
+            // checks if the email exists
             const emailExist = await checkEmailExist(userEmail);
             if(emailExist){
                 return `${userEmail} already exists`;
