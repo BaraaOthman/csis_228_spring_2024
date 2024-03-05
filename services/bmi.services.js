@@ -1,6 +1,7 @@
 const getBMI = () =>{
 
-    let html = "<h1>The BMI is: </h1>";
+    let html = "<table border=1><thead><tr><th>Weight</th><th>Height</th></thead>";
+    
     return html;
 }
 
