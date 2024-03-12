@@ -15,7 +15,7 @@ const authenticate = async (email, password) => {
     }
 }
 
-const getUsers = async() => {
+const getUsers = async () => {
     try {
         let sql = `SELECT * FROM users`;
         const users = await query(sql);
@@ -36,15 +36,15 @@ const getUsers = async() => {
  * @param {int} id 
  * @returns users[]
  */
-const getUserById = async(id) =>{
+const getUserById = async (id) => {
 
-    try{
+    try {
         //let userByIdSQL = `SELECT * FROM users WHERE user_id = "${id}"";`;
         // prepared statement
         let userByIdSQL = "SELECT * FROM users WHERE user_id = ?";
         const user = await query(userByIdSQL, [id]);
         return user;
-    }catch(error){
+    } catch (error) {
         throw new Error(error);
     }
 
@@ -62,59 +62,58 @@ const getUserById = async(id) =>{
  * @param {String} userAddress 
  * @returns user
  */
-const insertUser = async(userName,
+const insertUser = async (userName,
     userEmail,
     userPassword,
     userDob,
     userMobileNumber,
     userDescription,
-    userAddress) =>{
+    userAddress) => {
 
-        try{
-            // checks if the email exists
-            const emailExist = await checkEmailExist(userEmail);
-            if(emailExist){
-                return `${userEmail} already exists`;
-            }
-            let sql = `INSERT INTO users 
+    try {
+        // checks if the email exists
+        const emailExist = await checkEmailExist(userEmail);
+        if (emailExist) {
+            return `${userEmail} already exists`;
+        }
+        let sql = `INSERT INTO users 
             (user_name, user_email, user_password, user_dob)
             VALUES
             (?, ?, ?, ?);
             `;
-            const result = await query(sql, 
-                [
-                    userName, 
-                    userEmail, 
-                    userPassword, 
-                    moment(userDob).format("YYYY-MM-DD")
-                ]);
-            const user = await query("select * from users where user_id = ?", 
+        const result = await query(sql,
+            [
+                userName,
+                userEmail,
+                userPassword,
+                moment(userDob).format("YYYY-MM-DD")
+            ]);
+        const user = await query("select * from users where user_id = ?",
             [result.insertId]);
-        
-            return user[0];
-        }catch(error){
-            throw new Error(error);
-        }
-}
 
-const checkEmailExist = async(email) =>{
-    try{
-        let sql = "SELECT * FROM users WHERE user_email = ?";
-        const result = await query(sql, [email]);
-        if(result && result.length){
-            return true;
-        }else{
-            return false;
-        }
-    }catch(error){
+        return user[0];
+    } catch (error) {
         throw new Error(error);
     }
 }
 
-const updateUser = async(user) => {
-    const {user_id, user_name, user_username, user_email, user_password, user_dob} = user;
+const checkEmailExist = async (email) => {
+    try {
+        let sql = "SELECT * FROM users WHERE user_email = ?";
+        const result = await query(sql, [email]);
+        if (result && result.length) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 
-    let sql = `UPDATE user SET 
+const updateUser = async (user_id, user_name, user_username, user_email, user_password, user_dob) => {
+    try {
+        let sql = `UPDATE user SET 
     user_username = ?, 
     user_name = ?, 
     user_email = ?,
@@ -123,10 +122,17 @@ const updateUser = async(user) => {
     WHERE user_id = ?;
     `;
 
-    const result = await query(sql, [user_username, user_name, user_email, user_password, moment(user_dob).format("YYYY-MM-DD"), user_id]);
+        await query(sql, [user_username, user_name, user_email, user_password, moment(user_dob).format("YYYY-MM-DD"), user_id]);
+        const updatedUserSQL = 'select * form users where user_id = ?';
+        const updateUser = await query(updatedUserSQL, [user_id]);
+        
+        return updateUser;
+    } catch (error) {
+        throw new Error(error);
+    }
 }
 
-const deleteUser = async(id) =>{
+const deleteUser = async (id) => {
     return await query("DELETE FROM user WHERE user_id = ?", [id]);
 }
 

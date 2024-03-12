@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { getUsers, insertUser, authenticate, getUserById } = require('../services/users.services');
+const { getUsers, insertUser, authenticate, getUserById, updateUser } = require('../services/users.services');
 
 const authenticateController = async(req, res) => {
   const {email, password} = req.body;
@@ -26,6 +26,30 @@ const getUsersController = async (req, res) => {
     res.status(500).json({ message: error?.message });
   }
 };
+
+const updateUserController = async (req, res)=>{
+  const errors = validationResult(req);
+
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors});
+  }
+
+  const {
+    userID,
+    userName,
+    userEmail,
+    userPassword,
+    userDob,
+  } = req.body;
+
+  try{
+    const result = await updateUser(userID, userName, userEmail, userPassword, userDob);
+    res.status(200).json({result});
+  }catch(error){
+    res.status(500).json({error: error});
+  }
+
+}
 
 const insertUserController = async (req, res) => {
   
@@ -83,4 +107,5 @@ module.exports = {
   insertUserController,
   authenticateController,
   getUserByIdController,
+  updateUserController
 };
