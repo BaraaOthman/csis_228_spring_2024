@@ -29,6 +29,13 @@ const getUsersController = async (req, res) => {
 
 const insertUserController = async (req, res) => {
   
+
+  const errors = validationResult(req);
+
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors});
+  }
+
   console.log(req.body);
   const {
     userName,
