@@ -19,7 +19,20 @@ const getUsers = async () => {
     try {
         let sql = `SELECT * FROM users`;
         const users = await query(sql);
-        return users;
+        let formattedUsers = [];
+        users.forEach(user=>{
+            let formattedUser = {
+                user_id: user.user_id,
+                country_id: user.country_id,
+                user_name: user.user_name,
+                user_phone_number: user.user_phone_number,
+                user_email: user.user_emaile,
+                user_dob: user.user_dob ? moment(user.user_dob).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD"),
+                user_password: user.user_password
+            }
+            formattedUsers.push(formattedUser);
+        });
+        return formattedUsers;
     } catch (error) {
         throw new Error(error);
     }

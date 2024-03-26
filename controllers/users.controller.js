@@ -20,7 +20,9 @@ const authenticateController = async(req, res) => {
 
 const getUsersController = async (req, res) => {
   try {
-    res.status(200).json({ users: await getUsers() });
+    let users = await getUsers();
+    //res.status(200).json({ users: await getUsers() });
+    res.render("index", {users});
   } catch (error) {
     // ? conditional return
     res.status(500).json({ message: error?.message });

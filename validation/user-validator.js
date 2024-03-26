@@ -14,7 +14,7 @@ const insertUserValidation = [
 ];
 
 const updateUserValidation = [
-    check(userID).notEmpty().withMessage('ID is required'),
+    check('userID').notEmpty().withMessage('ID is required'),
     check('userName').notEmpty().withMessage('Username is required'),
     check('userEmail').notEmpty().withMessage('Email is required'),
     check('userEmail').isEmail().withMessage('Invalid Email format'),
